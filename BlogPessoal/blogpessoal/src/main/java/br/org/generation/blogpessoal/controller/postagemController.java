@@ -1,8 +1,6 @@
 package br.org.generation.blogpessoal.controller;
 
 import java.util.List;
-import java.util.Optional;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
-
 import br.org.generation.blogpessoal.model.Postagem;
 import br.org.generation.blogpessoal.repository.PostagemRepository;
 
@@ -30,7 +25,7 @@ public class postagemController {
 
 	@Autowired
 	private PostagemRepository postagemRepository;
-	private Object id;
+	
 	
 	@GetMapping
 	public ResponseEntity <List<Postagem>> getAll(){

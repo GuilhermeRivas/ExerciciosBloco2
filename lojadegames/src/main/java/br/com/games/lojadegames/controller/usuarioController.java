@@ -1,6 +1,7 @@
 package br.com.games.lojadegames.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -18,7 +19,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.games.lojadegames.model.Usuario;
+import br.com.games.lojadegames.model.UsuarioLogin;
 import br.com.games.lojadegames.repository.UsuarioRepository;
+import br.com.games.lojadegames.service.UsuarioService;
 
 @RestController
 @RequestMapping("/usuarios")
@@ -28,30 +31,37 @@ public class usuarioController {
 	@Autowired
 	private UsuarioRepository usuarioRepository;
 
-	@GetMapping
+	@Autowired
+	private UsuarioService usuarioService;
+	
+	@GetMapping("/all")
 	public ResponseEntity<List<Usuario>> getAll(){
 		return ResponseEntity.ok(usuarioRepository.findAll());
 	}
 	
-	@GetMapping("/{id}")
-	public ResponseEntity<Usuario> getById(@PathVariable Long id){
-		return usuarioRepository.findById(id)
-				.map(resp -> ResponseEntity.ok(resp))
-				.orElse(ResponseEntity.notFound().build());
+	
+	@PostMapping("/logar")
+	public ResponseEntity<UsuarioLogin> login(@RequestBody Optional<UsuarioLogin> user) {
+		return usuarioService.autenticarUsuario(user)
+			.map(resposta -> ResponseEntity.ok(resposta))
+			.orElse(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
 	}
 	
-	@PostMapping
-	public ResponseEntity <Usuario> postUsuario(@Valid @RequestBody Usuario usuario){
-		return ResponseEntity.status(HttpStatus.CREATED).body(usuarioRepository.save(usuario));
-		
+	@PostMapping("/cadastrar")
+	public ResponseEntity<Usuario> postUsuario(@Valid @RequestBody Usuario usuario) {
+
+		return usuarioService.cadastrarUsuario(usuario)
+			.map(resposta -> ResponseEntity.status(HttpStatus.CREATED).body(resposta))
+			.orElse(ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
+
 	}
+
 	
-	@PutMapping
-	public ResponseEntity <?> putUsuario(@Valid @RequestBody Usuario usuario){
-		return usuarioRepository.findById(usuario.getId())
-				.map(resp -> ResponseEntity.status(HttpStatus.OK).body(usuarioRepository.save(usuario)))
-				.orElse(ResponseEntity.notFound().build());
-		
+	@PutMapping("/atualizar")
+	public ResponseEntity<Usuario> putUsuario(@Valid @RequestBody Usuario usuario) {
+		return usuarioService.atualizarUsuario(usuario)
+			.map(resposta -> ResponseEntity.status(HttpStatus.OK).body(resposta))
+			.orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
 	}
 	
 	@DeleteMapping("/{id}")

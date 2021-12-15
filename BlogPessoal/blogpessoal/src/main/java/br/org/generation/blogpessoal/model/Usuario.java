@@ -48,7 +48,14 @@ public class Usuario {
 	private String senha;
 
 	private String foto;
-
+	
+		public Usuario(long id, String nome, String usuario, String senha) {
+		
+		this.id = id;
+		this.nome = nome;
+		this.usuario = usuario;
+		this.senha = senha;
+		}
 	/**
 	 * CascadeType.REMOVE -> Ele propaga a operação de remoção de um objeto Pai para um 
 	 * objeto Filho. 

@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.org.generation.blogpessoal.model.Tema;
 import br.org.generation.blogpessoal.repository.TemaRepository;
 
+
 @RestController
 @RequestMapping("/temas")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -43,7 +44,7 @@ public class temaController {
 	
 	@GetMapping("/descricao/{descricao}")
 	public ResponseEntity<List<Tema>> getByDescricao(@PathVariable String descricao){
-		return ResponseEntity.ok(temaRepository.findAllbyDescricaoContainingIgnoreCase(descricao));
+		return ResponseEntity.ok(temaRepository.findAllByDescricaoContainingIgnoreCase(descricao));
 	}
 	
 	@PostMapping
